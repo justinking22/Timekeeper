@@ -45,5 +45,33 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLName</key>
+			<string></string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>com.googleusercontent.apps.826191439264-i6qlu2kdll7g5jpsgqo84oovf641vca4</string>
+                <string>fb3703075206669619</string>
+			</array>
+		</dict>
+	</array>
+    
+    
+    <key>FacebookAppID</key>
+    <string>3703075206669619</string>
+    <key>FacebookClientToken</key>
+    <string>47b7996e2e7c9c6d7c38875b33848b4e</string>
+    <key>FacebookDisplayName</key>
+    <string>Time Tracker</string>
+    
+    
+    
+    <key>LSApplicationQueriesSchemes</key>
+    <array>
+      <string>fbapi</string>
+      <string>fb-messenger-share-api</string>
+    </array>
 </dict>
 </plist>

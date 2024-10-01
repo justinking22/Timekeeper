@@ -3,7 +3,6 @@ import 'package:timekeeper/common_widgets/custom_elevated_button.dart';
 
 class SocialSignInButton extends CustomElevatedButton {
   SocialSignInButton({
-    super.key,
     required String? assetName,
     required String? text,
     Color? color,
@@ -30,5 +29,6 @@ class SocialSignInButton extends CustomElevatedButton {
             backgroundColor: WidgetStatePropertyAll(color),
             elevation: const WidgetStatePropertyAll(5.0),
           ),
+          onPressed: onPressed,
         );
 }

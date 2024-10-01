@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Time Keeper</string>
+    <string name="facebook_app_id">3703075206669619</string>
+    <string name="fb_login_protocol_scheme">fb3703075206669619</string>
+    <string name="facebook_client_token">47b7996e2e7c9c6d7c38875b33848b4e</string>
+</resources>
