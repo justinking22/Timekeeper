@@ -1,8 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:timekeeper/app/home/models/job.dart';
+import 'package:timekeeper/common_widgets/show_exception_alert_dialog.dart';
 import 'package:timekeeper/services/database.dart';
-import '../common_widgets/show_alert_dialog.dart';
-import '../services/auth.dart';
+import '../../common_widgets/show_alert_dialog.dart';
+import '../../services/auth.dart';
 
 class JobsPage extends StatelessWidget {
   Future<void> _signOut(BuildContext context) async {
@@ -29,7 +32,14 @@ class JobsPage extends StatelessWidget {
 
   Future<void> _createJob(BuildContext context) async {
     final database = Provider.of<DataBase>(context, listen: false);
-    await database.createJob({'name': 'Blogging', 'ratePerHour': 10});
+    try {
+      await database.createJob(
+        Job(name: 'Blogging', ratePerHour: 10),
+      );
+    } on FirebaseException catch (e) {
+      showExceptionAlertDialog(context,
+          title: 'Operation failed', exception: e);
+    }
   }
 
   @override
@@ -55,10 +65,31 @@ class JobsPage extends StatelessWidget {
           ),
         ],
       ),
+      body: _buildContents(context),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
         onPressed: () => _createJob(context),
       ),
+    );
+  }
+
+  Widget _buildContents(BuildContext context) {
+    final database = Provider.of<DataBase>(context, listen: false);
+    return StreamBuilder<List<Job?>>(
+      stream: database.jobStream(),
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          final jobs = snapshot.data;
+          final children = jobs!.map((job) => Text(job!.name)).toList();
+          return ListView(
+            children: children,
+          );
+        }
+        if (snapshot.hasError) {
+          return Center(child: Text('Some error occured'));
+        }
+        return Center(child: CircularProgressIndicator());
+      },
     );
   }
 }
