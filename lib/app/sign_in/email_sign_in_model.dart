@@ -1,5 +1,7 @@
 import 'package:timekeeper/app/sign_in/validators.dart';
 
+enum EmailSignInFormType { signIn, register }
+
 class EmailSignInModel with EmailAndPasswordValidators {
   EmailSignInModel({
     this.email = '',

@@ -5,10 +5,11 @@ import 'package:timekeeper/services/auth.dart';
 
 class SignInManager {
   SignInManager({required this.auth, required this.isLoading});
+
   final AuthBase auth;
   final ValueNotifier<bool> isLoading;
 
-  Future<User> _signIn(Future<User> Function() signInMethod) async {
+  Future<User?> _signIn(Future<User?> Function() signInMethod) async {
     try {
       isLoading.value = true;
       return await signInMethod();
@@ -18,10 +19,10 @@ class SignInManager {
     }
   }
 
-  Future<User> signInAnonymously() async =>
-      await _signIn(auth.signInAnonymously() as Future<User> Function());
-  Future<User> signInWithGoogle() async =>
-      await _signIn(auth.signInWithGoogle() as Future<User> Function());
-  Future<User> signInWithFacebook() async =>
-      await _signIn(auth.signInWithFacebook() as Future<User> Function());
+  Future<User?> signInAnonymously() async =>
+      await _signIn(auth.signInAnonymously);
+  Future<User?> signInWithGoogle() async =>
+      await _signIn(auth.signInWithGoogle);
+  Future<User?> signInWithFacebook() async =>
+      await _signIn(auth.signInWithFacebook);
 }

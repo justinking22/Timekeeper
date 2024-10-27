@@ -1,12 +1,10 @@
-import 'package:flutter/foundation.dart';
-
 class Entry {
   Entry({
-    @required this.id,
-    @required this.jobId,
-    @required this.start,
-    @required this.end,
-    this.comment,
+    required this.id,
+    required this.jobId,
+    required this.start,
+    required this.end,
+    required this.comment,
   });
 
   String id;

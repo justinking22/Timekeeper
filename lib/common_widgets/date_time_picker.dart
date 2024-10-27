@@ -1,23 +1,24 @@
 import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:timekeeper/app/home/jobs/job_entries/format.dart';
-import 'package:timekeeper/app/home/jobs/job_entries/input_dropdown.dart';
+import 'package:timekeeper/common_widgets/input_dropdown.dart';
 
 class DateTimePicker extends StatelessWidget {
   const DateTimePicker({
+    Key? key,
     this.labelText,
-    this.selectedDate,
-    this.selectedTime,
-    this.onSelectedDate,
-    this.selectTime,
-    required void Function(dynamic time) onSelectedTime,
+    required this.selectedDate,
+    required this.selectedTime,
+    required this.selectDate,
+    required this.selectTime,
   });
 
   final String? labelText;
-  final DateTime? selectedDate;
-  final TimeOfDay? selectedTime;
-  final ValueChanged<DateTime>? onSelectedDate;
-  final ValueChanged<TimeOfDay>? selectTime;
+  final DateTime selectedDate;
+  final TimeOfDay selectedTime;
+  final ValueChanged<DateTime> selectDate;
+  final ValueChanged<TimeOfDay> selectTime;
 
   Future<void> _selectDate(BuildContext context) async {
     final pickedDate = await showDatePicker(
@@ -27,15 +28,15 @@ class DateTimePicker extends StatelessWidget {
       lastDate: DateTime(2100),
     );
     if (pickedDate != null && pickedDate != selectedDate) {
-      onSelectedDate!(pickedDate);
+      selectDate(pickedDate);
     }
   }
 
   Future<void> _selectTime(BuildContext context) async {
     final pickedTime =
-        await showTimePicker(context: context, initialTime: selectedTime!);
+        await showTimePicker(context: context, initialTime: selectedTime);
     if (pickedTime != null && pickedTime != selectedTime) {
-      selectTime!(pickedTime);
+      selectTime(pickedTime);
     }
   }
 
@@ -48,8 +49,8 @@ class DateTimePicker extends StatelessWidget {
         Expanded(
           flex: 5,
           child: InputDropdown(
-            labelText: labelText!,
-            valueText: Format.date(selectedDate!),
+            labelText: labelText,
+            valueText: Format.date(selectedDate),
             valueStyle: valueStyle!,
             onPressed: () => _selectDate(context),
           ),
@@ -58,7 +59,7 @@ class DateTimePicker extends StatelessWidget {
         Expanded(
           flex: 4,
           child: InputDropdown(
-            valueText: selectedTime!.format(context),
+            valueText: selectedTime.format(context),
             valueStyle: valueStyle,
             onPressed: () => _selectTime(context),
           ),
