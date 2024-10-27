@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:timekeeper/app/home/entries/daily_jobs_details.dart';
 import 'package:timekeeper/app/home/entries/entries_list_tile.dart';
