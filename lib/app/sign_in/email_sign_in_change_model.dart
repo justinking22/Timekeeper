@@ -1,9 +1,12 @@
+import 'package:flutter/foundation.dart';
+
+import 'package:timekeeper/app/sign_in/email_sign_in_model.dart';
 import 'package:timekeeper/app/sign_in/validators.dart';
+import 'package:timekeeper/services/auth.dart';
 
-enum EmailSignInFormType { signIn, register }
-
-class EmailSignInModel with EmailAndPasswordValidators {
-  EmailSignInModel({
+class EmailSignInChangeModel with EmailAndPasswordValidators, ChangeNotifier {
+  EmailSignInChangeModel({
+    required this.auth,
     this.email = '',
     this.password = '',
     this.formType = EmailSignInFormType.signIn,
@@ -11,11 +14,13 @@ class EmailSignInModel with EmailAndPasswordValidators {
     this.submitted = false,
   });
 
-  final String email;
-  final String password;
-  final EmailSignInFormType formType;
-  final bool isLoading;
-  final bool submitted;
+  final AuthBase auth;
+
+  String email;
+  String password;
+  EmailSignInFormType formType;
+  bool isLoading;
+  bool submitted;
 
   String get primaryButtonText {
     return formType == EmailSignInFormType.signIn
@@ -46,19 +51,50 @@ class EmailSignInModel with EmailAndPasswordValidators {
     return showErrortext ? inValidEmailErrorText : null;
   }
 
-  EmailSignInModel copyWith({
+  Future<void> submit() async {
+    updateWith(submitted: true, isLoading: true);
+    try {
+      if (formType == EmailSignInFormType.signIn) {
+        await auth.signInWithEmailAndPassword(email, password);
+      } else {
+        await auth.createUserWithEmailAndLogin(email, password);
+      }
+      //Navigator.of(context).pop();
+    } catch (e) {
+      updateWith(submitted: false);
+      rethrow;
+      //showExceptionAlertDialog(context, title: 'Sign In Failed', exception: e);
+    }
+  }
+
+  void toggleFormType() {
+    final formType = this.formType == EmailSignInFormType.signIn
+        ? EmailSignInFormType.register
+        : EmailSignInFormType.signIn;
+    updateWith(
+        email: '',
+        password: '',
+        formType: formType,
+        isLoading: false,
+        submitted: false);
+  }
+
+  void updateEmail(String email) => updateWith(email: email);
+
+  void updatePassword(String password) => updateWith(password: password);
+
+  void updateWith({
     String? email,
     String? password,
     EmailSignInFormType? formType,
     bool? isLoading,
     bool? submitted,
   }) {
-    return EmailSignInModel(
-      email: email ?? this.email,
-      password: password ?? this.password,
-      formType: formType ?? this.formType,
-      isLoading: isLoading ?? this.isLoading,
-      submitted: submitted ?? this.submitted,
-    );
+    this.email = email ?? this.email;
+    this.password = password ?? this.password;
+    this.formType = formType ?? this.formType;
+    this.isLoading = isLoading ?? this.isLoading;
+    this.submitted = submitted ?? this.submitted;
+    notifyListeners();
   }
 }

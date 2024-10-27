@@ -1,30 +1,27 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:timekeeper/app/home_page.dart';
+import 'package:provider/provider.dart';
+import 'package:timekeeper/app/home/homepage.dart';
+import 'package:timekeeper/app/home/jobs/jobs_page.dart';
 import 'package:timekeeper/app/sign_in/sign_in_page.dart';
-
-import '../services/auth.dart';
+import 'package:timekeeper/services/auth.dart';
+import 'package:timekeeper/services/database.dart';
 
 class LandingPage extends StatelessWidget {
-  LandingPage({required this.auth});
-
-  late final AuthBase auth;
-
   @override
   Widget build(BuildContext context) {
+    final auth = Provider.of<AuthBase>(context, listen: false);
     return StreamBuilder<User?>(
       stream: auth.authStateChanges(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.active) {
           final User? user = snapshot.data;
           if (user == null) {
-            return SignInPage(
-              auth: auth,
-            );
+            return SignInPage.create(context);
           }
-          return HomePage(
-            auth: auth,
-          );
+          return Provider<Database>(
+              create: (_) => FirestoreDatabase(uid: user.uid),
+              child: Homepage());
         }
         return Scaffold(
           body: Center(

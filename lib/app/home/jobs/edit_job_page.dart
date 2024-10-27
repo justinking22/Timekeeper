@@ -1,34 +1,55 @@
-import 'package:firebase_core/firebase_core.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:timekeeper/app/home/models/job.dart';
 import 'package:timekeeper/common_widgets/show_alert_dialog.dart';
 import 'package:timekeeper/common_widgets/show_exception_alert_dialog.dart';
 import 'package:timekeeper/services/database.dart';
 
-class AddJobPage extends StatefulWidget {
-  const AddJobPage({required this.database});
-  final DataBase database;
-  static Future<void> show(BuildContext context) async {
-    final database = Provider.of<DataBase>(context, listen: false);
+class EditJobPage extends StatefulWidget {
+  EditJobPage({super.key, required this.database, this.job});
+  final Database database;
+  final Job? job;
+
+  static Future<void> show(BuildContext context,
+      {required Database database, Job? job}) async {
     await Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (context) => AddJobPage(
+        builder: (context) => EditJobPage(
           database: database,
+          job: job,
         ),
+        fullscreenDialog: true,
       ),
     );
   }
 
   @override
-  State<AddJobPage> createState() => _AddJobPageState();
+  State<EditJobPage> createState() => _EditJobPageState();
 }
 
-class _AddJobPageState extends State<AddJobPage> {
+class _EditJobPageState extends State<EditJobPage> {
   final _formKey = GlobalKey<FormState>();
 
   String? _name;
   int? _ratePerHour;
+  final FocusNode _nameFocusNode = FocusNode();
+  final FocusNode _ratePerHourFocusNode = FocusNode();
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.job != null) {
+      _name = widget.job?.name;
+      _ratePerHour = widget.job?.ratePerHour;
+    }
+    super.initState();
+  }
+
+  void dispose() {
+    _nameFocusNode.dispose();
+    _ratePerHourFocusNode.dispose();
+    super.dispose();
+  }
 
   bool _validateAndSaveForm() {
     final form = _formKey.currentState;
@@ -42,24 +63,22 @@ class _AddJobPageState extends State<AddJobPage> {
   Future<void> _submit() async {
     if (_validateAndSaveForm()) {
       try {
-        final jobs = await widget.database.jobStream().first;
-        final allNames = jobs.map((job) => job!.name).toList();
+        final jobs = await widget.database.jobsStream().first;
+        final allNames = jobs.map((job) => job.name).toList();
         if (allNames.contains(_name)) {
           showAlertDialog(context,
               title: 'Name already used',
               content: 'Please choose a different name',
               defaultActionText: 'OK');
         } else {
-          final job = Job(name: _name!, ratePerHour: _ratePerHour!);
-          await widget.database.createJob(job);
+          final id = widget.job?.id ?? documentIdFromCurrentDate();
+          final job = Job(name: _name!, ratePerHour: _ratePerHour!, id: id);
+          await widget.database.setJob(job);
           Navigator.of(context).pop();
         }
       } on FirebaseException catch (e) {
-        showExceptionAlertDialog(
-          context,
-          title: 'Operation failed',
-          exception: e,
-        );
+        showExceptionAlertDialog(context,
+            title: 'Operation failed', exception: e);
       }
     }
   }
@@ -67,26 +86,31 @@ class _AddJobPageState extends State<AddJobPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[200],
       appBar: AppBar(
-        backgroundColor: Colors.indigo,
-        elevation: 2.0,
-        title: Text(
-          'New Job',
-          style: TextStyle(
-            color: Colors.white,
-          ),
+        leading: IconButton(
+          onPressed: () => Navigator.of(context).pop(),
+          icon: Icon(Icons.close, color: Colors.white),
         ),
+        title: Text(
+          widget.job == null ? 'New job' : 'Edit job',
+          style: TextStyle(
+              color: Colors.white, fontSize: 20.0, fontWeight: FontWeight.bold),
+        ),
+        elevation: 2.0,
+        backgroundColor: Colors.indigo,
         actions: [
           TextButton(
-            child: Text(
-              'Save',
-              style: TextStyle(fontSize: 18.0, color: Colors.white),
-            ),
-            onPressed: _submit,
-          )
+              onPressed: _submit,
+              child: Text(
+                'Save',
+                style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20.0),
+              ))
         ],
       ),
+      backgroundColor: Colors.grey[200],
       body: _buildContents(),
     );
   }
@@ -118,17 +142,22 @@ class _AddJobPageState extends State<AddJobPage> {
   List<Widget> _buildFormChildren() {
     return [
       TextFormField(
-        decoration: InputDecoration(labelText: 'Job Name'),
+        focusNode: _nameFocusNode,
+        initialValue: _name,
+        decoration: InputDecoration(labelText: 'Job name'),
         validator: (value) => value!.isNotEmpty ? null : 'Name can\'t be empty',
         onChanged: (value) => _name = value,
       ),
       TextFormField(
-        decoration: InputDecoration(
-          labelText: 'Rate Per Hour',
+        focusNode: _ratePerHourFocusNode,
+        initialValue: _ratePerHour != null ? '$_ratePerHour' : null,
+        decoration: InputDecoration(labelText: 'Rate per hour'),
+        keyboardType: TextInputType.numberWithOptions(
+          signed: false,
+          decimal: false,
         ),
-        keyboardType:
-            TextInputType.numberWithOptions(signed: false, decimal: false),
-        onChanged: (value) => _ratePerHour = int.tryParse(value),
+        validator: (value) => value!.isNotEmpty ? null : 'Rate can\'t be empty',
+        onChanged: (value) => _ratePerHour = int.tryParse(value) ?? 0,
       )
     ];
   }

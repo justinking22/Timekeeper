@@ -3,8 +3,8 @@ import 'package:timekeeper/common_widgets/custom_elevated_button.dart';
 
 class FormSubmitButton extends CustomElevatedButton {
   FormSubmitButton(
-      {@required String? text,
-      @required VoidCallback? onPressed,
+      {required String? text,
+      required VoidCallback? onPressed,
       Color? color,
       Color? textColor})
       : super(
