@@ -1,4 +1,4 @@
-# timekeeper
+# Timekeeper
 
 A Time Keeper App helps users log and monitor the time they spend on various tasks or projects. It’s especially useful for freelancers, employees, students, or anyone who wants to manage their productivity and time effectively.
 
