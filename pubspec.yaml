@@ -27,11 +27,20 @@ dependencies:
   rxdart: ^0.28.0
 
 dev_dependencies:
-  flutter_test:
+  flutter_launcher_icons: ^0.10.0
+
+flutter_icons:
+    android: true
+    ios: true
+    image_path: "assets/time.png"
+
+flutter_test:
     sdk: flutter
 
 
-  flutter_lints: ^4.0.0
+
+
+flutter_lints: ^4.0.0
 
 
 flutter:

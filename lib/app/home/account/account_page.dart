@@ -56,16 +56,17 @@ class AccountPage extends StatelessWidget {
   }
 
   _buildUserInfo(User? user) {
+    if (user == null) return SizedBox();
     return Column(
       children: [
         Avatar(
-          photoUrl: user!.photoURL!,
+          photoUrl: user.photoURL ?? "",
           radius: 50,
         ),
         SizedBox(height: 8),
         if (user.displayName != null)
           Text(
-            user.displayName!,
+            user.displayName ?? 'No name',
             style: TextStyle(color: Colors.white),
           ),
         SizedBox(
