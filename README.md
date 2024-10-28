@@ -18,8 +18,3 @@ In summary, a Time Keeeer App helps users stay organized and ensures accountabil
 
 
 
-
-![](https://github.com/user-attachments/assets/041ba21f-c737-49d0-9ba7-7092aedde9ba | width=100
-
-
-
