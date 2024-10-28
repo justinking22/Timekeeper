@@ -46,14 +46,11 @@ class _HomepageState extends State<Homepage> {
 
   @override
   Widget build(BuildContext context) {
-    return PopScope(
-      //onWillPop: () async => !await navigatorKeys[_currentTab].currentState.maybePop(),
-      child: CupertinoHomeScaffold(
-        currentTab: _currentTab,
-        onSelectTab: _select,
-        widgetBuilders: widgetBuilders,
-        navigatorKeys: navigatorKeys,
-      ),
+    return CupertinoHomeScaffold(
+      currentTab: _currentTab,
+      onSelectTab: _select,
+      widgetBuilders: widgetBuilders,
+      navigatorKeys: navigatorKeys,
     );
   }
 }
