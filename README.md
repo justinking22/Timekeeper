@@ -19,7 +19,7 @@ In summary, a Time Keeeer App helps users stay organized and ensures accountabil
 
 
 
-![[Simulator Screenshot - iPhone 16 Plus - 2024-10-29 at 05 38 28](https://github.com/user-attachments/assets/041ba21f-c737-49d0-9ba7-7092aedde9ba | width=100
+![Simulator Screenshot - iPhone 16 Plus - 2024-10-29 at 05 38 28](https://github.com/user-attachments/assets/041ba21f-c737-49d0-9ba7-7092aedde9ba | width=100
 
 
 
