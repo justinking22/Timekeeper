@@ -18,12 +18,12 @@ In summary, a Time Keeeer App helps users stay organized and ensures accountabil
 
 
 <img src="images/Sign-In.png" width="400"> <img src="images/A.png" width="400">
-<img src="images/B.png" width="200">
-<img src="images/C.png" width="200">
-<img src="images/D.png" width="200">
-<img src="images/E.png" width="200">
-<img src="images/F.png" width="200">
-<img src="images/G.png" width="200">
+<img src="images/B.png" width="400">
+<img src="images/C.png" width="400">
+<img src="images/D.png" width="400">
+<img src="images/E.png" width="400">
+<img src="images/F.png" width="400">
+<img src="images/G.png" width="400">
 
 
 
