@@ -17,7 +17,7 @@ Teams: Collaborate on projects by logging individual hours.
 In summary, a Time Keeeer App helps users stay organized and ensures accountability by giving insights into how their time is being spent.
 
 
-<img src="images/Sign-In.png" width="200"> <img src="images/A.png" width="200">
+<img src="images/Sign-In.png" width="400"> <img src="images/A.png" width="400">
 <img src="images/B.png" width="200">
 <img src="images/C.png" width="200">
 <img src="images/D.png" width="200">
